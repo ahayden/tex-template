@@ -1,17 +1,16 @@
 .PHONY = all clean
 
-TEX = docker compose run texbox
-
 IN := $(wildcard *.tex)
 OUT := $(SRCS:%.tex=%.pdf)
 
 all: ${OUT}
 
 %.pdf: %.tex
-	${TEX} $(basename $< .tex)
+	docker compose run spellcheck $<
+	docker compose run texbox $(basename $< .tex)
 
 clean:
-	rm -rvf *.log *.aux *.bbl *.blg *.run.xml *.bcf *.out ${OUT}
+	rm -rvf *.log *.aux *.bbl *.blg *.run.xml *.bcf *.out *.sum ${OUT}
 
 distclean: clean
 	rm -rvf *.pdf
